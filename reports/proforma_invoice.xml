@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="estu_so_report" inherit_id = "sale.report_saleorder_document" primary="True">
+        <xpath expr="//h2[hasclass('mt16')]" position="replace">
+            <div class="page">
+                <div style="width:800px; height:auto;float:left;margin-bottom:5px;">
+                    <div style="width:680px;float:left;">
+                        <h5>
+                            <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+                                <span t-if="doc.state not in ['draft','sent']">Order # </span>
+                                <span t-if="doc.state in ['draft','sent']">Quotation # </span>
+                            </t>
+                            <t t-if="env.context.get('proforma', False) or is_pro_forma">
+                                <span>Pro-Forma Invoice # </span>
+                            </t>
+                            <strong>
+                                <span t-field="doc.name"/>
+                            </strong>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+        <xpath expr="//table[hasclass=('table table-sm o_main_table')]" position="before">
+            <!-- <p style="padding-left:10px; padding-top:10px; padding-right:10px; text-align:center;"> -->
+            <table class="table table-Primary" style="text-align:center;">
+                <thead>
+                    <tr>
+                        <strong>
+                            <span t-field="doc.description"/>
+                        </strong>
+                    </table>
+                </tr>
+            </thead>
+            <p style="text-align:center;">
+                <img t-if="doc.image" t-att-src="'data:image/*;base64,%s' % to_text(doc.image)" style="max-width:830px;"/>
+            </p>
+        </xpath>
+
+
+        <xpath expr="//tbody[hasclass=('sale_tbody')]" position="inside">
+            <table class="table_notes">
+                <thead class="thead-Info">
+                    <tr>
+                        <span t-field="doc.notes"/>
+                    </tr>
+                </thead>
+            </table>
+
+            <!-- <table class="table_amount">
+                <thead class="thead-Info">
+                    <tr>
+                        <span t-field="doc.notes"/>
+                    </tr>
+                    <tr>
+                        <span t-field="doc."/>
+                    </tr>
+                </thead>
+            </table> -->
+        </xpath>
+
+        <xpath expr="//div[hasclass=('mt32 ml64 mr4')]" position="replace">
+            <table border="1" style="width:100%;">
+                <tr style="font-weight:bold;">
+                    <td>
+                        <div widget="html" t-field="doc.e_signature"/>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </xpath>
+
+    </template>
+
+
+
+    <!-- Report Menu -->
+    <report id="report_proforma_invoice"
+        string = "Pro-Forma Invoice"
+        model = "sale.order"
+        report_type = "qweb-pdf"
+        name = "sale_order.estu_so_report"
+        file = "sale_order.estu_so_report" />
+
+</odoo>
